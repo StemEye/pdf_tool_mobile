@@ -3,7 +3,6 @@ import 'api_interceptor.dart';
 
 /// Created by Babar on 2/25/2022.
 abstract class ApiProvider {
-
   Future<Response> markdownToPdf(String markdown);
 }
 
@@ -16,10 +15,11 @@ class ApiProviderImpl implements ApiProvider {
 
   static BaseOptions options = BaseOptions(
     baseUrl: "http://3.82.232.141/api/v1",
-    
+
     contentType: Headers.formUrlEncodedContentType,
     //"application/json",
     followRedirects: false,
+    //responseType: ResponseTy,
     responseType: ResponseType.plain,
     connectTimeout: const Duration(seconds: 20),
     receiveTimeout: const Duration(seconds: 20),
@@ -28,8 +28,7 @@ class ApiProviderImpl implements ApiProvider {
     },
   );
 
- 
-@override
+  @override
   Future<Response> markdownToPdf(String markdown) async {
     // create form data
     final formData = FormData.fromMap({
@@ -40,5 +39,4 @@ class ApiProviderImpl implements ApiProvider {
     });
     return _dio.post('/convert/markdown/pdf', data: formData);
   }
-
 }

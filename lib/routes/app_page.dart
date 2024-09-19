@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
+import 'package:stemeye_pdf_mobile/data/network/api_interceptor.dart';
+import 'package:stemeye_pdf_mobile/data/network/api_provider.dart';
 import 'package:stemeye_pdf_mobile/modules/file_bottom/binding/files_binding.dart';
 import 'package:stemeye_pdf_mobile/modules/file_bottom/view/files_view.dart';
 import 'package:stemeye_pdf_mobile/modules/home_bottom/binding/home_binding.dart';
+import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/home_controller.dart';
 import 'package:stemeye_pdf_mobile/modules/home_bottom/view/home_view.dart';
 import 'package:stemeye_pdf_mobile/modules/logging/binding/logging_binding.dart';
 import 'package:stemeye_pdf_mobile/modules/logging/view/logging_view.dart';
@@ -31,7 +34,7 @@ class AppPages {
         binding: LoggingBinding()),
     GetPage(
         name: Paths.HomeView,
-        page: () => const HomeView(),
+        page: () =>  HomeView(controller: HomeController(ApiProviderImpl(ApiInterceptor())),),
         binding: HomeBinding()),
     GetPage(
         name: Paths.FilesView,

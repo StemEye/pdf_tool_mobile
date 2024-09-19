@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/home_controller.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
-
+  HomeView({super.key, required this.controller});
+  final HomeController controller;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(onPressed: () {}, child: Text('btn 1')),
-        ElevatedButton(onPressed: () {}, child: Text('btn 2')),
-        ElevatedButton(onPressed: () {}, child: Text('btn 3')),
-        ElevatedButton(onPressed: () {}, child: Text('btn 4')),
-        ElevatedButton(onPressed: () {}, child: Text('btn 5')),
-      ],
+    //final controller = Get.put(HomeController(_apiProvider));
+    String sampleMarkDown = """ #Sample Markdown
+    This is sample content """;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Markdown to PDF"),
+      ),
+      body: ElevatedButton(
+          onPressed: () async {
+           await controller.requestStoragePermission();
+
+            controller.convertMarkDownToPdf(sampleMarkDown);
+          },
+          child: Text("markdown to pdf")),
     );
   }
 }
