@@ -1,6 +1,9 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:stemeye_pdf_mobile/data/network/api_interceptor.dart';
 import 'package:stemeye_pdf_mobile/data/network/api_provider.dart';
+import 'package:stemeye_pdf_mobile/modules/bottom_nav_bar/binding/navbar_binding.dart';
+import 'package:stemeye_pdf_mobile/modules/bottom_nav_bar/view/navbar_view.dart';
 import 'package:stemeye_pdf_mobile/modules/file_bottom/binding/files_binding.dart';
 import 'package:stemeye_pdf_mobile/modules/file_bottom/view/files_view.dart';
 import 'package:stemeye_pdf_mobile/modules/home_bottom/binding/home_binding.dart';
@@ -8,8 +11,8 @@ import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/home_controlle
 import 'package:stemeye_pdf_mobile/modules/home_bottom/view/home_view.dart';
 import 'package:stemeye_pdf_mobile/modules/logging/binding/logging_binding.dart';
 import 'package:stemeye_pdf_mobile/modules/logging/view/logging_view.dart';
-import 'package:stemeye_pdf_mobile/modules/scanner_bottom/binding/scanner_binding.dart';
-import 'package:stemeye_pdf_mobile/modules/scanner_bottom/view/scanner_view.dart';
+import 'package:stemeye_pdf_mobile/modules/favorite_bottom/binding/fav_binding.dart';
+import 'package:stemeye_pdf_mobile/modules/favorite_bottom/view/favorite_view.dart';
 import 'package:stemeye_pdf_mobile/modules/setting_bottom/binding/setting_binding.dart';
 import 'package:stemeye_pdf_mobile/modules/setting_bottom/view/setting_view.dart';
 import 'package:stemeye_pdf_mobile/modules/splash/binding/splash_binding.dart';
@@ -33,9 +36,11 @@ class AppPages {
         page: () => const LoggingView(),
         binding: LoggingBinding()),
     GetPage(
-        name: Paths.HomeView,
-        page: () =>  HomeView(controller: HomeController(ApiProviderImpl(ApiInterceptor())),),
-        binding: HomeBinding()),
+        name: Paths.NavbarView,
+        page: () => const NavbarView(),
+        binding: NavbarBinding()),
+    GetPage(
+        name: Paths.HomeView, page: () => HomeView(), binding: HomeBinding()),
     GetPage(
         name: Paths.FilesView,
         page: () => const FilesView(),
@@ -45,9 +50,9 @@ class AppPages {
         page: () => const ToolsView(),
         binding: ToolsBinding()),
     GetPage(
-        name: Paths.ScannerView,
-        page: () => const ScannerView(),
-        binding: ScannerBinding()),
+        name: Paths.FavoriteView,
+        page: () => const FavoriteView(),
+        binding: FavBinding()),
     GetPage(
         name: Paths.SettingView,
         page: () => const SettingView(),

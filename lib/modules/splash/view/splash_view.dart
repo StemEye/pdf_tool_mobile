@@ -8,7 +8,7 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration(seconds: 3), () {
-      Get.offAndToNamed(AppRoutes.HomeView);
+      Get.offAndToNamed(AppRoutes.NavbarView);
     });
 
     return Scaffold(
