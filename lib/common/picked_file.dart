@@ -61,6 +61,32 @@ class PickedfileScreen extends StatelessWidget {
                     imagePaths != null) {
                   homeController.convertToPdf(
                       imagePaths!, 'fit', 'color', true);
+                } else if (conversionType == 'sanitize pdf') {
+                  bool removeJavaScript = true;
+                  bool removeEmbeddedFiles = true;
+                  bool removeMetadata = true;
+                  bool removeLinks = true;
+                  bool removeFonts = false;
+                  homeController.sanitizePDF(
+                      filePath!,
+                      removeJavaScript,
+                      removeEmbeddedFiles,
+                      removeMetadata,
+                      removeLinks,
+                      removeFonts);
+                } else if (conversionType == 'remove certificate') {
+                  homeController.removeCertSignPDF(filePath!);
+                } else if (conversionType == 'pdf info') {
+                  homeController.getPdfInfo(filePath!);
+                } else if (conversionType == 'repair pdf') {
+                  homeController.repairPdf(filePath!);
+                } else if (conversionType == 'flatten pdf') {
+                  bool flattenOnlyForms = false;
+
+                  homeController.flattenPdf(filePath!, flattenOnlyForms);
+                } else if (conversionType == 'extract images') {
+                  String imageformat = 'png';
+                  homeController.extractImage(filePath!, imageformat);
                 }
               },
               child: Text('convert $conversionType'),

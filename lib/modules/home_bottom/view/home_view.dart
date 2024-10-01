@@ -3,8 +3,13 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stemeye_pdf_mobile/common/add_password.dart';
+import 'package:stemeye_pdf_mobile/common/add_watermark.dart';
+import 'package:stemeye_pdf_mobile/common/compress_pdf.dart';
 import 'package:stemeye_pdf_mobile/common/cus_user_input.dart';
-import 'package:stemeye_pdf_mobile/common/pickedfile_screen.dart';
+import 'package:stemeye_pdf_mobile/common/picked_file.dart';
+import 'package:stemeye_pdf_mobile/common/remove_blank_pages.dart';
+import 'package:stemeye_pdf_mobile/common/user_add_file.dart';
 import 'package:stemeye_pdf_mobile/data/network/api_interceptor.dart';
 import 'package:stemeye_pdf_mobile/data/network/api_provider.dart';
 import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/home_controller.dart';
@@ -313,7 +318,296 @@ class HomeView extends StatelessWidget {
                       child: Center(child: Text("Images to Pdf")),
                     ),
                   ),
-                ])
+                  SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () async {
+                      FilePickerResult? result =
+                          await FilePicker.platform.pickFiles();
+                      if (result != null && result.files.single.path != null) {
+                        Get.to(PickedfileScreen(
+                          filePath: result.files.single.path,
+                          conversionType: 'sanitize pdf',
+                        ));
+                      } else {
+                        // Inform user if no file was picked
+                        Get.snackbar(
+                            'Error', 'No file selected. Please pick a PDF.');
+                      }
+                    },
+                    child: Container(
+                      height: MyHelperFunctions.screenHeight() * 0.15,
+                      width: MyHelperFunctions.screenWidth() * 0.4,
+                      color: MyColors.grey,
+                      child: Center(child: Text("Sanitize Your Pdf")),
+                    ),
+                  ),
+                ]),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null &&
+                            result.files.single.path != null) {
+                          Get.to(UserAddFile(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'remove password',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("remove password")),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null &&
+                            result.files.single.path != null) {
+                          Get.to(PickedfileScreen(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'remove certificate',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("remove certificate")),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null &&
+                            result.files.single.path != null) {
+                          Get.to(PickedfileScreen(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'pdf info',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("Get Pdf Info")),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null &&
+                            result.files.single.path != null) {
+                          Get.to(AddPassword(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'protect pdf',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("Secure Pdf File")),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null) {
+                          Get.to(PickedfileScreen(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'repair pdf',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("Repair Pdf File")),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null &&
+                            result.files.single.path != null &&
+                            result.files.single.path!.isNotEmpty) {
+                          print(result.files.single.path);
+
+                          Get.to(AddWatermark(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'add watermark',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("Add Watermark")),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null &&
+                            result.files.single.path != null) {
+                          Get.to(RemoveBlankPages(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'remove blank pages',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("Remove Blank Pages")),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null &&
+                            result.files.single.path != null) {
+                          Get.to(PickedfileScreen(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'flatten pdf',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("Flatten Pdf")),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result = await FilePicker.platform
+                            .pickFiles(
+                                type: FileType.custom,
+                                allowedExtensions: ['pdf']);
+                        if (result != null &&
+                            result.files.single.path != null) {
+                          Get.to(PickedfileScreen(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'extract images',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("Extract Images")),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result = await FilePicker.platform
+                            .pickFiles(
+                                type: FileType.custom,
+                                allowedExtensions: ['pdf']);
+                        if (result != null &&
+                            result.files.single.path != null) {
+                          Get.to(CompressPdf(
+                            filePath: result.files.single.path ?? '',
+                            conversionType: 'compress pdf',
+                          ));
+                        } else {
+                          // Inform user if no file was picked
+                          Get.snackbar(
+                              'Error', 'No file selected. Please pick a PDF.');
+                        }
+                      },
+                      child: Container(
+                        height: MyHelperFunctions.screenHeight() * 0.15,
+                        width: MyHelperFunctions.screenWidth() * 0.4,
+                        color: MyColors.grey,
+                        child: Center(child: Text("Compress Pdf")),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),

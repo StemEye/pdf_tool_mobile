@@ -455,9 +455,10 @@ class ApiProviderImpl implements ApiProvider {
       bool removeFonts) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "removeJavaScript": removeJavaScript,
       "removeEmbeddedFiles": removeEmbeddedFiles,
@@ -465,44 +466,59 @@ class ApiProviderImpl implements ApiProvider {
       "removeLinks": removeLinks,
       "removeFonts": removeFonts,
     });
-    return _dio.post('/security/sanitize-pdf', data: formData);
+    //return _dio.post('/security/sanitize-pdf', data: formData);
+    final response = await _dio.post('/security/sanitize-pdf',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
   @override
   Future<Response> removePassword(String pdfBytes, String password) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "password": password,
     });
-    return _dio.post('/security/remove-password', data: formData);
+    //return _dio.post('/security/remove-password', data: formData);
+    final response = await _dio.post('/security/remove-password',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
   @override
   Future<Response> removeCertSignPDF(String pdfBytes) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
     });
-    return _dio.post('/security/remove-cert-sign', data: formData);
+    //return _dio.post('/security/remove-cert-sign', data: formData);
+    final response = await _dio.post('/security/remove-password',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
   @override
   Future<Response> getPdfInfo(String pdfBytes) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
     });
-    return _dio.post('/security/get-info-on-pdf', data: formData);
+    //return _dio.post('/security/get-info-on-pdf', data: formData);
+    final response = await _dio.post('/security/get-info-on-pdf',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
   @override
@@ -578,6 +594,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/security/auto-redact', data: formData);
   }
 
+// issue
   @override
   Future<Response> addWatermark(
       String pdfBytes,
@@ -593,15 +610,16 @@ class ApiProviderImpl implements ApiProvider {
       bool convertPDFToImage) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
         filename: "input.pdf",
       ),
       "watermarkType": watermarkType,
       "watermarkText": watermarkText,
-      "watermarkImage": MultipartFile.fromString(
+      "watermarkImage": MultipartFile.fromFile(
         watermarkImage,
-        filename: "watermark.png", // Adjust filename based on actual file type
+        //filename: "watermark.png", // Adjust filename based on actual file type
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "alphabet": alphabet,
       "fontSize": fontSize,
@@ -611,7 +629,10 @@ class ApiProviderImpl implements ApiProvider {
       "heightSpacer": heightSpacer,
       "convertPDFToImage": convertPDFToImage,
     });
-    return _dio.post('/security/add-watermark', data: formData);
+    //return _dio.post('/security/add-watermark', data: formData);
+    final response = await _dio.post('/security/add-watermark',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
   @override
@@ -630,9 +651,10 @@ class ApiProviderImpl implements ApiProvider {
       bool canPrintFaithful) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "ownerPassword": ownerPassword,
       "password": password,
@@ -646,15 +668,20 @@ class ApiProviderImpl implements ApiProvider {
       "canPrint": canPrint,
       "canPrintFaithful": canPrintFaithful,
     });
-    return _dio.post('/security/add-password', data: formData);
+    //return _dio.post('/security/add-password', data: formData);
+
+    final response = await _dio.post('/security/add-password',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
+//cannot working
   @override
   Future<Response> handleData(List<String> fileInput, String json) async {
     // create form data
     final formData = FormData.fromMap({
       "fileInput": fileInput
-          .map((byte) => MultipartFile.fromString(
+          .map((byte) => MultipartFile.fromFile(
                 byte,
                 filename:
                     "input.file", // Adjust filename based on actual file type
@@ -665,6 +692,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/pipeline/handleData', data: formData);
   }
 
+//cannot working
   @override
   Future<Response> metadata(
       String pdfBytes,
@@ -700,6 +728,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/misc/update-metadata', data: formData);
   }
 
+//not working
   @override
   Future<Response> extractHeader(String pdfBytes) async {
     // create form data
@@ -716,29 +745,39 @@ class ApiProviderImpl implements ApiProvider {
   Future<Response> repairPdf(String pdfBytes) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
     });
     return _dio.post('/misc/repair', data: formData);
+    // final response = await _dio.post('/misc/repair',
+    //     data: formData, options: Options(responseType: ResponseType.bytes));
+    // return response;
   }
 
+//file downloaded but not opening
   @override
   Future<Response> removeBlankPages(
       String pdfBytes, int threshold, double whitePercent) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "threshold": threshold,
       "whitePercent": whitePercent,
     });
     return _dio.post('/misc/remove-blanks', data: formData);
+    // final response = await _dio.post('/misc/remove-blanks',
+    //     data: formData, options: Options(responseType: ResponseType.bytes));
+    // return response;
   }
 
+//not working
   @override
   Future<Response> processPdfWithOCR(
       String pdfBytes,
@@ -772,28 +811,38 @@ class ApiProviderImpl implements ApiProvider {
   Future<Response> flatten(String pdfBytes, bool flattenOnlyForms) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "flattenOnlyForms": flattenOnlyForms,
     });
-    return _dio.post('/misc/flatten', data: formData);
+    //return _dio.post('/misc/flatten', data: formData);
+    final response = await _dio.post('/misc/flatten',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
   @override
   Future<Response> extractImages(String pdfBytes, String format) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "format": format,
     });
-    return _dio.post('/misc/extract-images', data: formData);
+    //return _dio.post('/misc/extract-images', data: formData);
+    final response = await _dio.post('/misc/extract-images',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
+  //not understanding
   @override
   Future<Response> extractImageScans(String pdfBytes, int angleThreshold,
       int tolerance, int minArea, int minContourArea, int borderSize) async {
@@ -812,26 +861,32 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/misc/extract-image-scans', data: formData);
   }
 
+  //only less then 1mb file compress, in app the compress file size increase
   @override
   Future<Response> optimizePdf(
       String pdfBytes, int optimizeLevel, String expectedOutputSize) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "optimizeLevel": optimizeLevel,
       "expectedOutputSize": expectedOutputSize,
     });
-    return _dio.post('/misc/compress-pdf', data: formData);
+    //return _dio.post('/misc/compress-pdf', data: formData);
+    final response = await _dio.post('/misc/compress-pdf',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
   @override
   Future<Response> autoSplitPdf(String pdfBytes, bool duplexMode) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
         filename: "input.pdf",
       ),
