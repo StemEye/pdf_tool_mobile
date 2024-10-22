@@ -1,9 +1,14 @@
 import 'package:get/get.dart';
 
 class DropdownController extends GetxController {
-  var selectedLevel = 2.obs; // default value is 2
+  var selectedLevel = ''.obs; // default value is 2
+  var selectedPages = '2'.obs;
 
-  void updateLevel(int level) {
+  void updateLevel(String level) {
     selectedLevel.value = level;
+  }
+
+  void updatePage(String pages) {
+    selectedPages.value = pages;
   }
 }

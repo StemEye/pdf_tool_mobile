@@ -24,6 +24,19 @@ dependencies:
   file_picker: ^8.1.2
   pdf: ^3.11.1  
   archive: ^3.6.1
+  path_provider: ^2.1.4
+  flutter_colorpicker: ^1.1.0
+  syncfusion_flutter_pdfviewer: ^27.1.51
+  liquid_progress_indicator_v2: ^0.5.0
+  flutter_spinkit: ^5.2.1
+  flutter_svg: ^2.0.10+1
+  animated_custom_dropdown: ^3.1.1
+  open_file: ^3.5.9
+  shared_preferences: ^2.3.2
+  share_plus: ^10.1.0
+  webview_flutter: ^4.0.4 
+  
+  
   
   #Icons
   cupertino_icons: ^1.0.6
@@ -49,9 +62,10 @@ flutter:
 
   #--------------- LOCAL ASSETS ------------------#
 
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/conversion_icons/
+    - assets/project_import/
+    - assets/convert_file/
 
   
   #--------------- LOCAL FONTS ------------------#

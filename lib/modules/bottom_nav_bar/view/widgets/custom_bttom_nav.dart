@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:stemeye_pdf_mobile/utils/helpers/helper_function.dart';
 
 import '../../controller/navbar_controller.dart';
@@ -8,8 +9,8 @@ class CustomBttomNav extends StatelessWidget {
   CustomBttomNav({super.key});
   final List<String> itemNames = ['Home', 'File', 'Favorite', 'Settings'];
   final List<IconData> itemIcons = [
-    Icons.home_outlined,
-    Icons.folder_outlined,
+    Iconsax.home,
+    Iconsax.folder,
     Icons.star_outline,
     Icons.settings_outlined
   ];
@@ -19,7 +20,7 @@ class CustomBttomNav extends StatelessWidget {
 
     return Obx(() {
       return Container(
-        color: Colors.grey.withOpacity(0.2),
+        color: Colors.blue.withOpacity(0.2),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(4, (index) {
@@ -36,7 +37,7 @@ class CustomBttomNav extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: navController.currentIndex.value == index
-                              ? Colors.red.withOpacity(0.4)
+                              ? Colors.grey.withOpacity(0.2)
                               : Colors.transparent,
                         ),
                         //padding: EdgeInsets.all(8),

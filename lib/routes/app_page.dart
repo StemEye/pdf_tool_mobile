@@ -43,7 +43,7 @@ class AppPages {
         name: Paths.HomeView, page: () => HomeView(), binding: HomeBinding()),
     GetPage(
         name: Paths.FilesView,
-        page: () => const FilesView(),
+        page: () => FilesView(),
         binding: FilesBinding()),
     GetPage(
         name: Paths.ToolsView,
@@ -55,7 +55,7 @@ class AppPages {
         binding: FavBinding()),
     GetPage(
         name: Paths.SettingView,
-        page: () => const SettingView(),
+        page: () => SettingView(),
         binding: SettingBinding()),
   ];
 }

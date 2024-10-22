@@ -612,14 +612,14 @@ class ApiProviderImpl implements ApiProvider {
     final formData = FormData.fromMap({
       "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "watermarkType": watermarkType,
       "watermarkText": watermarkText,
-      "watermarkImage": MultipartFile.fromFile(
+      "watermarkImage": MultipartFile.fromString(
         watermarkImage,
-        //filename: "watermark.png", // Adjust filename based on actual file type
-        contentType: DioMediaType.parse('application/pdf'),
+        filename: "watermark.png", // Adjust filename based on actual file type
       ),
       "alphabet": alphabet,
       "fontSize": fontSize,
@@ -728,17 +728,21 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/misc/update-metadata', data: formData);
   }
 
-//not working
+//not accurate working working
   @override
   Future<Response> extractHeader(String pdfBytes) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
     });
-    return _dio.post('/misc/show-javascript', data: formData);
+    //return _dio.post('/misc/show-javascript', data: formData);
+    final response = await _dio.post('/misc/show-javascript',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
   @override
@@ -757,7 +761,6 @@ class ApiProviderImpl implements ApiProvider {
     // return response;
   }
 
-//file downloaded but not opening
   @override
   Future<Response> removeBlankPages(
       String pdfBytes, int threshold, double whitePercent) async {
@@ -771,10 +774,10 @@ class ApiProviderImpl implements ApiProvider {
       "threshold": threshold,
       "whitePercent": whitePercent,
     });
-    return _dio.post('/misc/remove-blanks', data: formData);
-    // final response = await _dio.post('/misc/remove-blanks',
-    //     data: formData, options: Options(responseType: ResponseType.bytes));
-    // return response;
+    //return _dio.post('/misc/remove-blanks', data: formData);
+    final response = await _dio.post('/misc/remove-blanks',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+    return response;
   }
 
 //not working
@@ -842,7 +845,7 @@ class ApiProviderImpl implements ApiProvider {
     return response;
   }
 
-  //not understanding
+//not understanding
   @override
   Future<Response> extractImageScans(String pdfBytes, int angleThreshold,
       int tolerance, int minArea, int minContourArea, int borderSize) async {
@@ -888,25 +891,36 @@ class ApiProviderImpl implements ApiProvider {
     final formData = FormData.fromMap({
       "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "duplexMode": duplexMode,
     });
-    return _dio.post('/misc/auto-split-pdf', data: formData);
+    //return _dio.post('/misc/auto-split-pdf', data: formData);
+    final response = await _dio.post('/misc/auto-split-pdf',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
+//similer to rename so, i use extractheader
   @override
   Future<Response> extractHeader_1(
       String pdfBytes, bool useFirstTextAsFallback) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "useFirstTextAsFallback": useFirstTextAsFallback,
     });
-    return _dio.post('/misc/auto-rename', data: formData);
+    //return _dio.post('/misc/auto-rename', data: formData);
+    final response = await _dio.post('/misc/auto-rename',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
   @override
@@ -927,9 +941,10 @@ class ApiProviderImpl implements ApiProvider {
       String customColor) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "pageNumbers": pageNumbers,
       "stampType": stampType,
@@ -948,7 +963,11 @@ class ApiProviderImpl implements ApiProvider {
       "customMargin": customMargin,
       "customColor": customColor,
     });
-    return _dio.post('/misc/add-stamp', data: formData);
+    //return _dio.post('/misc/add-stamp', data: formData);
+    final response = await _dio.post('/misc/add-stamp',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
   @override
@@ -962,9 +981,10 @@ class ApiProviderImpl implements ApiProvider {
       String customText) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "pageNumbers": pageNumbers,
       "customMargin": customMargin,
@@ -973,9 +993,14 @@ class ApiProviderImpl implements ApiProvider {
       "pagesToNumber": pagesToNumber,
       "customText": customText,
     });
-    return _dio.post('/misc/add-page-numbers', data: formData);
+    //return _dio.post('/misc/add-page-numbers', data: formData);
+    final response = await _dio.post('/misc/add-page-numbers',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
+  //not working(file to large issue)
   @override
   Future<Response> overlayImage(String pdfBytes, String imageFile, double x,
       double y, bool everyPage) async {
@@ -996,6 +1021,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/misc/add-image', data: formData);
   }
 
+//similer to the autoSplitPdf_1
   @override
   Future<Response> splitPdf(String pdfBytes, int horizontalDivisions,
       int verticalDivisions, bool merge) async {
@@ -1012,6 +1038,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/general/split-pdf-by-sections', data: formData);
   }
 
+//similer to the autoSplitPdf_1
   @override
   Future<Response> splitPdf_1(String pdfBytes, String pageNumbers) async {
     // create form data
@@ -1030,16 +1057,22 @@ class ApiProviderImpl implements ApiProvider {
       String pdfBytes, int splitType, String splitValue) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "splitType": splitType,
       "splitValue": splitValue,
     });
-    return _dio.post('/general/split-by-size-or-count', data: formData);
+    //return _dio.post('/general/split-by-size-or-count', data: formData);
+    final response = await _dio.post('/general/split-by-size-or-count',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
+//test this more
   @override
   Future<Response> scalePages(
       String pdfBytes, String pageSize, double scaleFactor) async {
@@ -1059,40 +1092,56 @@ class ApiProviderImpl implements ApiProvider {
   Future<Response> rotatePDF(String pdfBytes, int angle) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "angle": angle,
     });
-    return _dio.post('/general/rotate-pdf', data: formData);
+    //return _dio.post('/general/rotate-pdf', data: formData);
+    final response = await _dio.post('/general/rotate-pdf',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
   @override
   Future<Response> deletePages(String pdfBytes, String pageNumbers) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "pageNumbers": pageNumbers,
     });
-    return _dio.post('/general/remove-pages', data: formData);
+    //return _dio.post('/general/remove-pages', data: formData);
+    final response = await _dio.post('/general/remove-pages',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
   @override
   Future<Response> removeImages(String pdfBytes) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
     });
-    return _dio.post('/general/remove-image-pdf', data: formData);
+    //return _dio.post('/general/remove-image-pdf', data: formData);
+    final response = await _dio.post('/general/remove-image-pdf',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
+//not useful
   @override
   Future<Response> rearrangePages(
       String pdfBytes, String pageNumbers, String customMode) async {
@@ -1112,22 +1161,29 @@ class ApiProviderImpl implements ApiProvider {
   Future<Response> pdfToSinglePage(String pdfBytes) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
     });
-    return _dio.post('/general/pdf-to-single-page', data: formData);
+    //return _dio.post('/general/pdf-to-single-page', data: formData);
+    final response = await _dio.post('/general/pdf-to-single-page',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
+//not working properly
   @override
   Future<Response> overlayPdfs(String pdfBytes, List<String> overlayFiles,
       String overlayMode, List<int> counts, int overlayPosition) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "overlayFiles": overlayFiles
           .map((byte) => MultipartFile.fromString(
@@ -1140,7 +1196,11 @@ class ApiProviderImpl implements ApiProvider {
       "counts": counts,
       "overlayPosition": overlayPosition,
     });
-    return _dio.post('/general/overlay-pdfs', data: formData);
+    //return _dio.post('/general/overlay-pdfs', data: formData);
+    final response = await _dio.post('/general/overlay-pdfs',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
   @override
@@ -1148,16 +1208,22 @@ class ApiProviderImpl implements ApiProvider {
       String pdfBytes, int pagesPerSheet, bool addBorder) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "pagesPerSheet": pagesPerSheet,
       "addBorder": addBorder,
     });
-    return _dio.post('/general/multi-page-layout', data: formData);
+    //return _dio.post('/general/multi-page-layout', data: formData);
+    final response = await _dio.post('/general/multi-page-layout',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
+// issue in api
   @override
   Future<Response> mergePdfs(
       List<String> fileInput, String sortType, bool removeCertSign) async {
@@ -1181,18 +1247,24 @@ class ApiProviderImpl implements ApiProvider {
       String pdfBytes, double x, double y, double width, double height) async {
     // create form data
     final formData = FormData.fromMap({
-      "fileInput": MultipartFile.fromString(
+      "fileInput": await MultipartFile.fromFile(
         pdfBytes,
-        filename: "input.pdf",
+        //filename: "input.pdf",
+        contentType: DioMediaType.parse('application/pdf'),
       ),
       "x": x,
       "y": y,
       "width": width,
       "height": height,
     });
-    return _dio.post('/general/crop', data: formData);
+    //return _dio.post('/general/crop', data: formData);
+    final response = await _dio.post('/general/crop',
+        data: formData, options: Options(responseType: ResponseType.bytes));
+
+    return response;
   }
 
+// no result genrate
   @override
   Future<Response> pageSize(
       String pdfBytes, String comparator, String standardPageSize) async {
@@ -1208,6 +1280,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/filter/filter-page-size', data: formData);
   }
 
+//already added this type of functionality
   @override
   Future<Response> pageRotation(
       String pdfBytes, String comparator, int rotation) async {
@@ -1223,6 +1296,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/filter/filter-page-rotation', data: formData);
   }
 
+//cannot genrate result
   @override
   Future<Response> pageCount(
       String pdfBytes, String comparator, String pageCount) async {
@@ -1238,6 +1312,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/filter/filter-page-count', data: formData);
   }
 
+// server error
   @override
   Future<Response> fileSize(
       String pdfBytes, String comparator, String fileSize) async {
@@ -1253,6 +1328,7 @@ class ApiProviderImpl implements ApiProvider {
     return _dio.post('/filter/filter-file-size', data: formData);
   }
 
+// response code 200 but cannot genrate pdf
   @override
   Future<Response> containsText(
       String pdfBytes, String pageNumbers, String text) async {
@@ -1267,6 +1343,8 @@ class ApiProviderImpl implements ApiProvider {
     });
     return _dio.post('/filter/filter-contains-text', data: formData);
   }
+
+// response code 200 but cannot genrate pdf
 
   @override
   Future<Response> containsImage(String pdfBytes, String pageNumbers) async {
