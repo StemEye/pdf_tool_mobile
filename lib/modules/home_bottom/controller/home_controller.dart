@@ -304,21 +304,21 @@ class HomeController extends GetxController {
           print(
               'Received valid binary data with length: ${response.data.length}');
 
-          String? filePath = await FileSaver.instance.saveAs(
-            name: 'genrated_rttext',
+          await FileSaver.instance.saveAs(
+            name: 'text',
             bytes: Uint8List.fromList(response.data),
             ext: 'rtf',
             mimeType: MimeType.other,
           );
 
-          Conversion newConversion = Conversion(
-            filePath: filePath!,
-            conversionType: 'pdf to rttext',
-            timestamp: DateTime.now().toIso8601String(),
-          );
+          // Conversion newConversion = Conversion(
+          //   filePath: filePath!,
+          //   conversionType: 'pdf to rttext',
+          //   timestamp: DateTime.now().toIso8601String(),
+          // );
 
-          // Add to conversion history
-          await addConversion(newConversion);
+          // // Add to conversion history
+          // await addConversion(newConversion);
 
           Get.snackbar('Success', 'document saved successfully');
         } else {
@@ -621,8 +621,8 @@ class HomeController extends GetxController {
           String? filePath = await FileSaver.instance.saveAs(
             name: 'genrated_html',
             bytes: Uint8List.fromList(response.data),
-            ext: 'html',
-            mimeType: MimeType.other,
+            ext: 'zip',
+            mimeType: MimeType.zip,
           );
 
           Conversion newConversion = Conversion(
@@ -1454,21 +1454,21 @@ class HomeController extends GetxController {
               'Received valid binary data with length: ${response.data.length}');
 
           // Properly save the data to a zip file
-          String? filePath = await FileSaver.instance.saveAs(
+          await FileSaver.instance.saveAs(
             name: 'stamp',
             bytes: Uint8List.fromList(response.data),
             ext: 'pdf',
             mimeType: MimeType.pdf,
           );
 
-          Conversion newConversion = Conversion(
-            filePath: filePath!,
-            conversionType: 'add stamp',
-            timestamp: DateTime.now().toIso8601String(),
-          );
+          // Conversion newConversion = Conversion(
+          //   filePath: filePath!,
+          //   conversionType: 'add stamp',
+          //   timestamp: DateTime.now().toIso8601String(),
+          // );
 
-          // Add to conversion history
-          await addConversion(newConversion);
+          // // Add to conversion history
+          // await addConversion(newConversion);
 
           // Confirm success
           Get.snackbar('Success', 'stamp added successfully');
@@ -1561,41 +1561,41 @@ class HomeController extends GetxController {
               'Received valid binary data with length: ${response.data.length}');
 
           // Properly save the data to a zip file
-          String? filePath = await FileSaver.instance.saveAs(
+          await FileSaver.instance.saveAs(
             name: 'split',
             bytes: Uint8List.fromList(response.data),
             ext: 'zip',
             mimeType: MimeType.zip,
           );
 
-          if (filePath != null) {
-            Conversion newConversion = Conversion(
-              filePath: filePath,
-              conversionType: 'split by size',
-              timestamp: DateTime.now().toIso8601String(),
-            );
+          // if (filePath != null) {
+          //   Conversion newConversion = Conversion(
+          //     filePath: filePath,
+          //     conversionType: 'split by size',
+          //     timestamp: DateTime.now().toIso8601String(),
+          //   );
 
-            // Add to conversion history
-            await addConversion(newConversion);
-          } else if (filePath != null) {
-            Conversion newConversion = Conversion(
-              filePath: filePath,
-              conversionType: 'split by doc count',
-              timestamp: DateTime.now().toIso8601String(),
-            );
+          //   // Add to conversion history
+          //   await addConversion(newConversion);
+          // } else if (filePath != null) {
+          //   Conversion newConversion = Conversion(
+          //     filePath: filePath,
+          //     conversionType: 'split by doc count',
+          //     timestamp: DateTime.now().toIso8601String(),
+          //   );
 
-            // Add to conversion history
-            await addConversion(newConversion);
-          } else {
-            Conversion newConversion = Conversion(
-              filePath: filePath!,
-              conversionType: 'split by page count',
-              timestamp: DateTime.now().toIso8601String(),
-            );
+          //   // Add to conversion history
+          //   await addConversion(newConversion);
+          // } else {
+          //   Conversion newConversion = Conversion(
+          //     filePath: filePath!,
+          //     conversionType: 'split by page count',
+          //     timestamp: DateTime.now().toIso8601String(),
+          //   );
 
-            // Add to conversion history
-            await addConversion(newConversion);
-          }
+          //   // Add to conversion history
+          //   await addConversion(newConversion);
+          // }
 
           // Confirm success
           Get.snackbar('Success', 'Auto split successfully');

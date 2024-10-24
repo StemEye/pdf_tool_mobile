@@ -36,7 +36,9 @@ class CropPdf extends StatelessWidget {
                     // Let the user pick a file
                     try {
                       FilePickerResult? result = await FilePicker.platform
-                          .pickFiles(allowedExtensions: ['pdf']);
+                          .pickFiles(
+                              allowedExtensions: ['pdf'],
+                              type: FileType.custom);
                       if (result != null && result.files.isNotEmpty) {
                         // Update file path in the controller
                         filePickerController

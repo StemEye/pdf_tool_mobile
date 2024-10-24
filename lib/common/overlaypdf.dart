@@ -11,13 +11,18 @@ class Overlaypdf extends StatelessWidget {
     required this.conversionType,
   });
   final String conversionType;
+
   @override
   Widget build(BuildContext context) {
     final homeController = Get.find<HomeController>();
-    final filePickerController = Get.put(FilePickerController());
+    final filePickerController =
+        Get.find<FilePickerController>(); // Use Get.find instead of Get.put
     String? filePath = filePickerController.pickedFilePath.value;
+
     // Update the controller's file path with the passed filePath on initial load
-    filePickerController.updateFilePath(filePath);
+    if (filePath == null || filePath.isEmpty) {
+      filePickerController.updateFilePath(filePath);
+    }
 
     Future<void> pickAnotherFile() async {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -28,6 +33,8 @@ class Overlaypdf extends StatelessWidget {
       if (result != null && result.files.single.path != null) {
         // Update the controller with the new file path
         filePickerController.updateFilePath(result.files.single.path!);
+      } else {
+        Get.snackbar("Warning", "No file selected!");
       }
     }
 
@@ -44,9 +51,12 @@ class Overlaypdf extends StatelessWidget {
               onPressed: () async {
                 // Let the user pick a file
                 try {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-                  if (result != null && result.files.isNotEmpty) {
+                  FilePickerResult? result = await FilePicker.platform
+                      .pickFiles(
+                          type: FileType.custom, allowedExtensions: ['pdf']);
+                  if (result != null &&
+                      result.files.isNotEmpty &&
+                      result.files.single.path != null) {
                     // Update file path in the controller
                     filePickerController
                         .updateFilePath(result.files.single.path!);
@@ -90,18 +100,23 @@ class Overlaypdf extends StatelessWidget {
             SizedBox(height: 10),
             ElevatedButton(
                 onPressed: () {
-                  String overlayMode = 'Squential Overlay';
+                  String overlayMode =
+                      'Sequential Overlay'; // Typo fixed from 'Squential'
                   List<int> counts = [0];
                   int overlayPosition = 0;
                   List<String> overlayFiles = [
                     filePickerController.pickedFilePath.value
                   ];
                   if (conversionType == 'overlay') {
-                    homeController.overlayPdfs(filePath, overlayFiles,
-                        overlayMode, counts, overlayPosition);
+                    homeController.overlayPdfs(
+                        filePickerController.pickedFilePath.value,
+                        overlayFiles,
+                        overlayMode,
+                        counts,
+                        overlayPosition);
                   }
                 },
-                child: Text('overlay pdf'))
+                child: Text('Overlay PDF'))
           ],
         ),
       ),

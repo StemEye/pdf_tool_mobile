@@ -8,7 +8,7 @@
 
 
     <application
-        android:label="stemeye_pdf_mobile"
+        android:label="PDF Wizard Tools"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         android:requestLegacyExternalStorage="true"

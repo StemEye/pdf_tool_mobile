@@ -68,7 +68,7 @@ class PickedfileScreen extends StatelessWidget {
                             color: Colors.black),
                         child: Center(
                             child: Text(
-                          "Pick File",
+                          "Upload File",
                           style: TextStyle(color: Colors.white),
                         )),
                       ),
