@@ -107,6 +107,11 @@ class Overlaypdf extends StatelessWidget {
                   List<String> overlayFiles = [
                     filePickerController.pickedFilePath.value
                   ];
+                  if (filePath.isEmpty) {
+                    // Show snackbar if no file is selected
+                    Get.snackbar("Warning", "Please upload a file first!");
+                    return; // Exit the function early
+                  }
                   if (conversionType == 'overlay') {
                     homeController.overlayPdfs(
                         filePickerController.pickedFilePath.value,

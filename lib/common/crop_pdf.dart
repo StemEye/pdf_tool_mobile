@@ -146,6 +146,11 @@ class CropPdf extends StatelessWidget {
                   // Make sure to check if width and height are valid
                   if (width > 0 && height > 0) {
                     final filePath = filePickerController.pickedFilePath.value;
+                    if (filePath.isEmpty) {
+                      // Show snackbar if no file is selected
+                      Get.snackbar("Warning", "Please upload a file first!");
+                      return; // Exit the function early
+                    }
                     if (filePath.isNotEmpty) {
                       if (conversionType == 'crop pdf') {
                         await homeController.cropPdf(

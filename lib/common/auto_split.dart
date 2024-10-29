@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:stemeye_pdf_mobile/common/custom/custom_background.dart';
 import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/file_picker_controller.dart';
+import 'package:stemeye_pdf_mobile/utils/constant/colors.dart';
 
 import '../modules/home_bottom/controller/home_controller.dart';
 import '../utils/helpers/helper_function.dart';
@@ -24,7 +25,10 @@ class AutoSplitPdf extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(conversionType.toUpperCase()),
+          title: Text(conversionType.toUpperCase(),
+              style: TextStyle(color: MyColors.black)),
+          backgroundColor: Colors.blue.withOpacity(0.2),
+          iconTheme: IconThemeData(color: MyColors.black),
         ),
         body: Stack(children: [
           CustomPaint(
@@ -46,7 +50,9 @@ class AutoSplitPdf extends StatelessWidget {
                             // Let the user pick a file
                             try {
                               FilePickerResult? result =
-                                  await FilePicker.platform.pickFiles();
+                                  await FilePicker.platform.pickFiles(
+                                      allowedExtensions: ['pdf'],
+                                      type: FileType.custom);
                               if (result != null && result.files.isNotEmpty) {
                                 // Update file path in the controller
                                 filePickerController
@@ -73,9 +79,12 @@ class AutoSplitPdf extends StatelessWidget {
                       // Observe the picked file path
                       SizedBox(height: 20),
                       Obx(() {
-                        return Text(
-                          'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
-                          style: TextStyle(fontSize: 16),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         );
                       }),
 
@@ -87,9 +96,11 @@ class AutoSplitPdf extends StatelessWidget {
                         decoration: InputDecoration(
                             hintText: conversionType == 'split by size'
                                 ? "size in MB (e.g., '10MB')"
-                                : conversionType == 'split by page count'
-                                    ? "enetr number of pages (e.g., '5')"
-                                    : "enetr number of pdf doc (e.g., '5')",
+                                : conversionType == 'split by doc count'
+                                    ? "enter number of pdf doc (e.g., '5')"
+                                    : "enter number of pdf pages (e.g., '5')",
+                            hintStyle:
+                                TextStyle(fontSize: 13, color: Colors.grey),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.red.withOpacity(0.5)),
@@ -118,6 +129,13 @@ class AutoSplitPdf extends StatelessWidget {
                           onPressed: () {
                             String? filePath =
                                 filePickerController.pickedFilePath.value;
+
+                            if (filePath.isEmpty) {
+                              // Show snackbar if no file is selected
+                              Get.snackbar(
+                                  "Warning", "Please upload a file first!");
+                              return; // Exit the function early
+                            }
                             if (conversionType == 'split by size') {
                               int splitType = 0;
                               homeController.autoSplitPdf_1(

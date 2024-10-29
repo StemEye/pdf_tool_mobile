@@ -8,7 +8,7 @@ import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/home_controlle
 import 'package:stemeye_pdf_mobile/utils/constant/colors.dart';
 
 class PickedfileScreen extends StatelessWidget {
-  const PickedfileScreen({
+  PickedfileScreen({
     super.key,
     required this.conversionType,
     this.imagePaths,
@@ -16,6 +16,39 @@ class PickedfileScreen extends StatelessWidget {
 
   final String conversionType;
   final List<String>? imagePaths;
+
+  List<String> getAllowedExtensions(String conversionType) {
+    switch (conversionType.toLowerCase()) {
+      case 'pdf to xml':
+      case 'pdf to word':
+      case 'pdf to rttext':
+      case 'pdf to presentation':
+      case 'pdf to pdfa':
+      case 'pdf to image':
+      case 'pdf to csv':
+      case 'pdf to html':
+      case 'sanitize pdf':
+      case 'repair pdf':
+      case 'flatten pdf':
+      case 'extract images':
+      case 'remove certificate':
+      case 'remove images':
+      case 'pdf to single page':
+        return ['pdf']; // Only PDF files allowed for these conversions
+      case 'html to pdf':
+        return ['html', 'htm']; // Only HTML files allowed for this conversion
+      case 'file to pdf':
+        return [
+          'doc',
+          'docx',
+          'txt'
+        ]; // Allow Word or text files for this conversion
+      case 'images to pdf':
+        return ['jpg', 'jpeg', 'png']; // Only image files allowed
+      default:
+        return []; // No restriction by default
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +80,12 @@ class PickedfileScreen extends StatelessWidget {
                       onTap: () async {
                         // Let the user pick a file
                         try {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles();
+                          FilePickerResult? result = await FilePicker.platform
+                              .pickFiles(
+                                  allowedExtensions:
+                                      getAllowedExtensions(conversionType),
+                                  type: FileType.custom);
                           if (result != null && result.files.isNotEmpty) {
-                            // Update file path in the controller
                             filePickerController
                                 .updateFilePath(result.files.single.path!);
                           } else {
@@ -76,9 +111,12 @@ class PickedfileScreen extends StatelessWidget {
                     // Observe the picked file path
                     SizedBox(height: 30),
                     Obx(() {
-                      return Text(
-                        'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
-                        style: TextStyle(fontSize: 16, color: MyColors.black),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Text(
+                          'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
+                          style: TextStyle(fontSize: 16, color: MyColors.black),
+                        ),
                       );
                     }),
                     SizedBox(height: 20),
@@ -101,6 +139,7 @@ class PickedfileScreen extends StatelessWidget {
                         // Get the picked file path from the controller
                         String? filePath =
                             filePickerController.pickedFilePath.value;
+
                         if (filePath.isNotEmpty) {
                           try {
                             switch (conversionType) {
@@ -197,8 +236,11 @@ class PickedfileScreen extends StatelessWidget {
                           } catch (e) {
                             Get.snackbar("Error", "Conversion failed: $e");
                           }
-                        } else {
-                          Get.snackbar("Error", "No file picked!");
+                        } else if (filePath.isEmpty) {
+                          // Show snackbar if no file is selected
+                          Get.snackbar(
+                              "Warning", "Please upload a file first!");
+                          return; // Exit the function early
                         }
                       },
                       child: Text(

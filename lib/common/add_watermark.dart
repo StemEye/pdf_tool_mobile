@@ -43,8 +43,10 @@ class AddWatermark extends StatelessWidget {
                         onTap: () async {
                           // Let the user pick a file
                           try {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
+                            FilePickerResult? result = await FilePicker.platform
+                                .pickFiles(
+                                    allowedExtensions: ['pdf'],
+                                    type: FileType.custom);
                             if (result != null && result.files.isNotEmpty) {
                               // Update file path in the controller
                               filePickerController
@@ -109,6 +111,13 @@ class AddWatermark extends StatelessWidget {
                       onPressed: () {
                         String? filePath =
                             filePickerController.pickedFilePath.value;
+
+                        if (filePath.isEmpty) {
+                          // Show snackbar if no file is selected
+                          Get.snackbar(
+                              "Warning", "Please upload a file first!");
+                          return; // Exit the function early
+                        }
 
                         if (conversionType == 'add watermark') {
                           String watermarkType = 'Text';

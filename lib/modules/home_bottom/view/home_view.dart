@@ -233,17 +233,17 @@ class HomeView extends StatelessWidget {
         },
         conversionIcon: 'assets/conversion_icons/pdftohtml.svg',
       ),
-      Verticlacon(
-        containerColor: const Color.fromARGB(255, 140, 150, 0),
-        containerName: "Images to Pdf",
-        isStacked: toggelController.isStacked.value,
-        ontap: () async {
-          String conversionType = 'images to pdf';
-          Get.to(PickedfileScreen(conversionType: conversionType),
-              binding: HomeBinding());
-        },
-        conversionIcon: 'assets/conversion_icons/pdftoimage.svg',
-      ),
+      // Verticlacon(
+      //   containerColor: const Color.fromARGB(255, 140, 150, 0),
+      //   containerName: "Images to Pdf",
+      //   isStacked: toggelController.isStacked.value,
+      //   ontap: () async {
+      //     String conversionType = 'images to pdf';
+      //     Get.to(PickedfileScreen(conversionType: conversionType),
+      //         binding: HomeBinding());
+      //   },
+      //   conversionIcon: 'assets/conversion_icons/pdftoimage.svg',
+      // ),
       Verticlacon(
         containerColor: Colors.pink,
         containerName: "Seneitize",
@@ -473,48 +473,48 @@ class HomeView extends StatelessWidget {
         },
         conversionIcon: 'assets/conversion_icons/removeimages.svg',
       ),
-      Verticlacon(
-        containerColor: Colors.green,
-        containerName: "Overlay",
-        isStacked: toggelController.isStacked.value,
-        ontap: () async {
-          //String conversionType = '';
-          Get.to(
-              Overlaypdf(
-                conversionType: 'overlay',
-              ),
-              binding: HomeBinding());
-        },
-        conversionIcon: 'assets/conversion_icons/overlaypdf.svg',
-      ),
-      Verticlacon(
-        containerColor: Colors.deepPurple,
-        containerName: "Crop",
-        isStacked: toggelController.isStacked.value,
-        ontap: () async {
-          //String conversionType = '';
-          Get.to(
-              CropPdf(
-                conversionType: 'crop pdf',
-              ),
-              binding: HomeBinding());
-        },
-        conversionIcon: 'assets/conversion_icons/croppdf.svg',
-      ),
-      Verticlacon(
-        containerColor: Colors.deepPurple,
-        containerName: "Merge",
-        isStacked: toggelController.isStacked.value,
-        ontap: () async {
-          //String conversionType = '';
-          Get.to(
-              MergeMultipageIntoone(
-                conversionType: 'mul page into one',
-              ),
-              binding: HomeBinding());
-        },
-        conversionIcon: 'assets/conversion_icons/merge.svg',
-      ),
+      // Verticlacon(
+      //   containerColor: Colors.green,
+      //   containerName: "Overlay",
+      //   isStacked: toggelController.isStacked.value,
+      //   ontap: () async {
+      //     //String conversionType = '';
+      //     Get.to(
+      //         Overlaypdf(
+      //           conversionType: 'overlay',
+      //         ),
+      //         binding: HomeBinding());
+      //   },
+      //   conversionIcon: 'assets/conversion_icons/overlaypdf.svg',
+      // ),
+      // Verticlacon(
+      //   containerColor: Colors.deepPurple,
+      //   containerName: "Crop",
+      //   isStacked: toggelController.isStacked.value,
+      //   ontap: () async {
+      //     //String conversionType = '';
+      //     Get.to(
+      //         CropPdf(
+      //           conversionType: 'crop pdf',
+      //         ),
+      //         binding: HomeBinding());
+      //   },
+      //   conversionIcon: 'assets/conversion_icons/croppdf.svg',
+      // ),
+      // Verticlacon(
+      //   containerColor: Colors.deepPurple,
+      //   containerName: "Merge",
+      //   isStacked: toggelController.isStacked.value,
+      //   ontap: () async {
+      //     //String conversionType = '';
+      //     Get.to(
+      //         MergeMultipageIntoone(
+      //           conversionType: 'mul page into one',
+      //         ),
+      //         binding: HomeBinding());
+      //   },
+      //   conversionIcon: 'assets/conversion_icons/merge.svg',
+      // ),
     ];
   }
 }

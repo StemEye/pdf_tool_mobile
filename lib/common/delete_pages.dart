@@ -51,7 +51,9 @@ class DeletePages extends StatelessWidget {
                                 // Let the user pick a file
                                 try {
                                   FilePickerResult? result =
-                                      await FilePicker.platform.pickFiles();
+                                      await FilePicker.platform.pickFiles(
+                                          allowedExtensions: ['pdf'],
+                                          type: FileType.custom);
                                   if (result != null &&
                                       result.files.isNotEmpty) {
                                     // Update file path in the controller
@@ -86,9 +88,13 @@ class DeletePages extends StatelessWidget {
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
-                                  style: TextStyle(fontSize: 16),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  child: Text(
+                                    'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ),
 
                                 SizedBox(height: 10),
@@ -152,6 +158,12 @@ class DeletePages extends StatelessWidget {
                               onPressed: () {
                                 String? filePath =
                                     filePickerController.pickedFilePath.value;
+                                if (filePath.isEmpty) {
+                                  // Show snackbar if no file is selected
+                                  Get.snackbar(
+                                      "Warning", "Please upload a file first!");
+                                  return; // Exit the function early
+                                }
                                 if (conversionType == 'delete pages') {
                                   homeController.deletePages(
                                       filePath, DeletePages.text);

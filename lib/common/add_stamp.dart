@@ -27,7 +27,10 @@ class AddStamp extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Picked File"),
+          title: Text(conversionType.toUpperCase(),
+              style: TextStyle(color: MyColors.black)),
+          backgroundColor: Colors.blue.withOpacity(0.2),
+          iconTheme: IconThemeData(color: MyColors.black),
         ),
         body: Stack(children: [
           CustomPaint(
@@ -57,7 +60,11 @@ class AddStamp extends StatelessWidget {
                                         try {
                                           FilePickerResult? result =
                                               await FilePicker.platform
-                                                  .pickFiles();
+                                                  .pickFiles(
+                                                      allowedExtensions: [
+                                                'pdf'
+                                              ],
+                                                      type: FileType.custom);
                                           if (result != null &&
                                               result.files.isNotEmpty) {
                                             // Update file path in the controller
@@ -88,9 +95,13 @@ class AddStamp extends StatelessWidget {
                                   // Observe the picked file path
                                   SizedBox(height: 10),
                                   Obx(() {
-                                    return Text(
-                                      'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
-                                      style: TextStyle(fontSize: 14),
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Text(
+                                        'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
                                     );
                                   }),
                                   if (conversionType == 'add stamp')
@@ -102,8 +113,9 @@ class AddStamp extends StatelessWidget {
                                         decoration: InputDecoration(
                                             hintText:
                                                 "Enter page number like 1,2,4",
-                                            hintStyle:
-                                                TextStyle(color: Colors.grey),
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 14),
                                             focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.red
@@ -204,12 +216,12 @@ class AddStamp extends StatelessWidget {
                                     child: TextFormField(
                                       controller: stamptextController,
                                       decoration: InputDecoration(
-                                          hintText:
-                                              conversionType == 'add stamp'
-                                                  ? "Enter stamp text"
-                                                  : 'Enter custom text',
-                                          hintStyle:
-                                              TextStyle(color: Colors.grey),
+                                          hintText: conversionType ==
+                                                  'add stamp'
+                                              ? "Enter stamp text (instead page numb)"
+                                              : 'Enter custom text',
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey, fontSize: 14),
                                           focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Colors.red
@@ -234,9 +246,11 @@ class AddStamp extends StatelessWidget {
                                       child: TextFormField(
                                         controller: fontSizeController,
                                         decoration: InputDecoration(
-                                            hintText: "Enter font size",
-                                            hintStyle:
-                                                TextStyle(color: Colors.grey),
+                                            hintText:
+                                                "Enter font size (30 for best result)",
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 14),
                                             focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.red
@@ -262,9 +276,10 @@ class AddStamp extends StatelessWidget {
                                         controller: fontOpacityController,
                                         decoration: InputDecoration(
                                             hintText:
-                                                "Enter opacity of stamp text",
-                                            hintStyle:
-                                                TextStyle(color: Colors.grey),
+                                                "Enter opacity (0.5 for best result)",
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 14),
                                             focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.red
@@ -364,6 +379,13 @@ class AddStamp extends StatelessWidget {
                                           String? filePath =
                                               filePickerController
                                                   .pickedFilePath.value;
+
+                                          if (filePath.isEmpty) {
+                                            // Show snackbar if no file is selected
+                                            Get.snackbar("Warning",
+                                                "Please upload a file first!");
+                                            return; // Exit the function earl
+                                          }
                                           if (conversionType == 'add stamp') {
                                             String stampType = 'Text';
                                             String pageNumbers =
@@ -384,6 +406,13 @@ class AddStamp extends StatelessWidget {
                                             String customColorHex = colorToHex(
                                                 stampController
                                                     .selectedColor.value);
+
+                                            if (filePath.isEmpty) {
+                                              // Show snackbar if no file is selected
+                                              Get.snackbar("Warning",
+                                                  "Please upload a file first!");
+                                              return; // Exit the function early
+                                            }
 
                                             homeController.addStamp(
                                                 filePath,

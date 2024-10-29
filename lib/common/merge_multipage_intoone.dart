@@ -137,6 +137,11 @@ class MergeMultipageIntoone extends StatelessWidget {
                     ),
                     onPressed: () async {
                       //int pagepersheet = int.parse(pageController.text);
+                      if (filePath.isEmpty) {
+                        // Show snackbar if no file is selected
+                        Get.snackbar("Warning", "Please upload a file first!");
+                        return; // Exit the function early
+                      }
                       if (conversionType == 'mul page into one') {
                         bool addBorder = true;
                         int pages = dropdown.selectedPages.value.isNotEmpty

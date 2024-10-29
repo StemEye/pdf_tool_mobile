@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:stemeye_pdf_mobile/common/custom/custom_background.dart';
 import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/rotate_pdf_controller.dart';
+import 'package:stemeye_pdf_mobile/utils/constant/colors.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart'; // For displaying the PDF
 import '../modules/home_bottom/controller/home_controller.dart'; // Import the controller
 import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/file_picker_controller.dart';
@@ -14,6 +15,7 @@ import '../utils/helpers/helper_function.dart'; // File picker controller
 class Rotatepdf extends StatelessWidget {
   const Rotatepdf({super.key, required this.conversionType});
   final String conversionType;
+
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.find();
@@ -22,7 +24,10 @@ class Rotatepdf extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Rotate PDF"),
+        title: Text(conversionType.toUpperCase(),
+            style: TextStyle(color: MyColors.black)),
+        backgroundColor: Colors.blue.withOpacity(0.2),
+        iconTheme: IconThemeData(color: MyColors.black),
       ),
       body: Stack(children: [
         CustomPaint(
@@ -47,7 +52,9 @@ class Rotatepdf extends StatelessWidget {
                             // Let the user pick a file
                             try {
                               FilePickerResult? result =
-                                  await FilePicker.platform.pickFiles();
+                                  await FilePicker.platform.pickFiles(
+                                      allowedExtensions: ['pdf'],
+                                      type: FileType.custom);
                               if (result != null && result.files.isNotEmpty) {
                                 // Update file path in the controller
                                 filePickerController
@@ -75,9 +82,12 @@ class Rotatepdf extends StatelessWidget {
 
                     // Display the picked file's name
                     Obx(() {
-                      return Text(
-                        'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
-                        style: TextStyle(fontSize: 16),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Text(
+                          'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       );
                     }),
 
@@ -135,14 +145,17 @@ class Rotatepdf extends StatelessWidget {
                             onPressed: () {
                               final filePath =
                                   filePickerController.pickedFilePath.value;
-                              if (filePath.isNotEmpty &&
+                              if (filePath.isEmpty) {
+                                // Show snackbar if no file is selected
+                                Get.snackbar(
+                                    "Warning", "Please upload a file first!");
+                                return; // Exit the function early
+                              } else if (filePath.isNotEmpty &&
                                   conversionType == 'rotate pdf') {
                                 homeController.rotatePdf(
                                     filePath,
                                     rotateController.rotationAngle
                                         .value); // Call API to rotate the PDF
-                              } else {
-                                Get.snackbar("Error", "No file selected!");
                               }
                             },
                             child: const Text("Rotate"),

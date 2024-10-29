@@ -9,6 +9,13 @@ import '../utils/constant/colors.dart';
 class CusUserInput extends StatelessWidget {
   const CusUserInput({super.key, required this.conversionType});
   final String conversionType;
+
+  bool isValidUrl(String url) {
+    final urlPattern = r'^(https?|ftp)://[^\s/$.?#].[^\s]*$';
+    final regex = RegExp(urlPattern);
+    return regex.hasMatch(url);
+  }
+
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.find();
@@ -17,7 +24,7 @@ class CusUserInput extends StatelessWidget {
       appBar: AppBar(
         title: Text(conversionType.toUpperCase(),
             style: TextStyle(color: MyColors.black)),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue.withOpacity(0.2),
         iconTheme: IconThemeData(color: MyColors.black),
       ),
       body: Stack(children: [
@@ -42,8 +49,7 @@ class CusUserInput extends StatelessWidget {
                         decoration: InputDecoration(
                             hintText: 'Enter $conversionType for conversion',
                             hintStyle: TextStyle(
-                              color: MyColors.darkGrey,
-                            ),
+                                color: MyColors.darkGrey, fontSize: 14),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.red),
                                 borderRadius: BorderRadius.circular(50)),
@@ -68,14 +74,27 @@ class CusUserInput extends StatelessWidget {
                             ),
                           ),
                           onPressed: () async {
-                            await homeController.requestStoragePermission();
+                            if (inputController.text.isEmpty) {
+                              Get.snackbar(
+                                'Error',
+                                'Please enter a $conversionType value',
+                              );
+                            } else if (conversionType == 'url' &&
+                                !isValidUrl(inputController.text)) {
+                              Get.snackbar(
+                                'Invalid URL',
+                                'Please enter a valid URL for conversion',
+                              );
+                            } else {
+                              await homeController.requestStoragePermission();
 
-                            if (conversionType == 'markdown') {
-                              homeController
-                                  .convertMarkDownToPdf(inputController.text);
-                            } else if (conversionType == 'url') {
-                              homeController
-                                  .convertUrlToPdf(inputController.text);
+                              if (conversionType == 'markdown') {
+                                homeController
+                                    .convertMarkDownToPdf(inputController.text);
+                              } else if (conversionType == 'url') {
+                                homeController
+                                    .convertUrlToPdf(inputController.text);
+                              }
                             }
                           },
                           child: Text("$conversionType to pdf")),

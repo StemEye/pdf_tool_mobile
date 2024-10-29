@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:stemeye_pdf_mobile/common/custom/custom_background.dart';
 import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/file_picker_controller.dart';
 import 'package:stemeye_pdf_mobile/modules/home_bottom/controller/home_controller.dart';
+import 'package:stemeye_pdf_mobile/utils/constant/colors.dart';
 
 import '../utils/helpers/helper_function.dart';
 
@@ -24,7 +25,10 @@ class AddPassword extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Protect Pdf"),
+          title: Text(conversionType.toUpperCase(),
+              style: TextStyle(color: MyColors.black)),
+          backgroundColor: Colors.blue.withOpacity(0.2),
+          iconTheme: IconThemeData(color: MyColors.black),
         ),
         body: Stack(children: [
           CustomPaint(
@@ -43,8 +47,10 @@ class AddPassword extends StatelessWidget {
                         onTap: () async {
                           // Let the user pick a file
                           try {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
+                            FilePickerResult? result = await FilePicker.platform
+                                .pickFiles(
+                                    allowedExtensions: ['pdf'],
+                                    type: FileType.custom);
                             if (result != null && result.files.isNotEmpty) {
                               // Update file path in the controller
                               filePickerController
@@ -71,9 +77,12 @@ class AddPassword extends StatelessWidget {
                     // Observe the picked file path
                     SizedBox(height: 20),
                     Obx(() {
-                      return Text(
-                        'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
-                        style: TextStyle(fontSize: 16),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Text(
+                          'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       );
                     }),
 
@@ -83,7 +92,8 @@ class AddPassword extends StatelessWidget {
                         controller: ownerPassword,
                         decoration: InputDecoration(
                             hintText: "Enter your Password",
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 14),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.red.withOpacity(0.5)),
@@ -110,6 +120,13 @@ class AddPassword extends StatelessWidget {
                         onPressed: () {
                           String? filePath =
                               filePickerController.pickedFilePath.value;
+
+                          if (filePath.isEmpty) {
+                            // Show snackbar if no file is selected
+                            Get.snackbar(
+                                "Warning", "Please upload a file first!");
+                            return; // Exit the function early
+                          }
 
                           if (conversionType == 'protect pdf') {
                             bool canAssembleDocument = false;

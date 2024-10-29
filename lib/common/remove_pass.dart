@@ -17,7 +17,10 @@ class RemovePass extends StatelessWidget {
     FilePickerController filePickerController = Get.put(FilePickerController());
     return Scaffold(
         appBar: AppBar(
-          title: Text("Picked File"),
+          title: Text(conversionType.toUpperCase(),
+              style: TextStyle(color: MyColors.black)),
+          backgroundColor: Colors.blue.withOpacity(0.2),
+          iconTheme: IconThemeData(color: MyColors.black),
         ),
         body: Stack(children: [
           CustomPaint(
@@ -36,8 +39,10 @@ class RemovePass extends StatelessWidget {
                         onTap: () async {
                           // Let the user pick a file
                           try {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
+                            FilePickerResult? result = await FilePicker.platform
+                                .pickFiles(
+                                    allowedExtensions: ['pdf'],
+                                    type: FileType.custom);
                             if (result != null && result.files.isNotEmpty) {
                               // Update file path in the controller
                               filePickerController
@@ -63,9 +68,12 @@ class RemovePass extends StatelessWidget {
                         )),
                     SizedBox(height: 20),
                     Obx(() {
-                      return Text(
-                        'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
-                        style: TextStyle(fontSize: 16),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: Text(
+                          'Picked File: ${filePickerController.pickedFilePath.value.isNotEmpty ? filePickerController.pickedFilePath.value.split('/').last : 'No file picked'}',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       );
                     }),
                     Padding(
@@ -75,8 +83,7 @@ class RemovePass extends StatelessWidget {
                         decoration: InputDecoration(
                             hintText: "Enter your password",
                             hintStyle: TextStyle(
-                              color: MyColors.darkGrey,
-                            ),
+                                color: MyColors.darkGrey, fontSize: 14),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.red),
                                 borderRadius: BorderRadius.circular(50)),
@@ -102,6 +109,12 @@ class RemovePass extends StatelessWidget {
                           // Get the picked file path from the controller
                           String? filePath =
                               filePickerController.pickedFilePath.value;
+                          if (filePath.isEmpty) {
+                            // Show snackbar if no file is selected
+                            Get.snackbar(
+                                "Warning", "Please upload a file first!");
+                            return; // Exit the function early
+                          }
                           if (conversionType == 'remove password') {
                             homeController.removePassword(
                                 filePath, passwordController.text);
